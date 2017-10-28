@@ -1,13 +1,14 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace TagsCloudVisualization
 {
     public class Vector
     {
-        public int X;
-        public int Y;
+        public double X;
+        public double Y;
 
-        public Vector(int x, int y)
+        public Vector(double x, double y)
         {
             X = x;
             Y = y;
@@ -35,19 +36,24 @@ namespace TagsCloudVisualization
         {
             return new Vector(a.X / c, a.Y / c);
         }
-        public static Vector operator *(Vector a, int c)
+        public static Vector operator *( double c, Vector a)
         {
             return new Vector(a.X * c, a.Y * c);
         }
 
-        public Point ToPoint()
+        public static implicit operator Point(Vector vector)
         {
-            return new Point(X, Y);
+            return new Point((int)vector.X, (int)vector.Y);
         }
 
-        public Size ToSize()
+        public static implicit operator Size(Vector vector)
         {
-            return new Size(X, Y);
+            return new Size((int)vector.X, (int)vector.Y);
         }
+
+        public static Vector Angle(double rad)
+        {
+            return new Vector(Math.Cos(rad), Math.Sin(rad));
+        }                     
     }
 }
