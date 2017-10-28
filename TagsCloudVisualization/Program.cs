@@ -13,11 +13,12 @@ namespace TagsCloudVisualization
             var layout = new CircularCloudLayouter(cloudCenter);
             var rectangleList = new List<Rectangle>();
             rectangleList.Add(layout.PutNextRectangle(new Size(500, 90)));
-            for (var i = 0; i < 60; i++)
+            for (var i = 0; i < 400; i++)
             {
-                rectangleList.Add(layout.PutNextRectangle(new Size(random.Next(40,160), random.Next(20,60))));
+                rectangleList.Add(layout.PutNextRectangle(new Size(10,10)));
             }
             CloudTagDrawer.DrawToFile(cloudCenter, rectangleList, "1.bmp");
+            CloudTagDrawer.DrawToForm(cloudCenter,rectangleList);
 
         }
     }
