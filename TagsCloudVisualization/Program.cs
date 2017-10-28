@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace TagsCloudVisualization
@@ -8,14 +9,16 @@ namespace TagsCloudVisualization
         static void Main(string[] args)
         {
             var random = new Random();
-            var layout = new CircularCloudLayouter(new Point(400, 400));
-            layout.PutNextRectangle(new Size(500, 90));
+            var cloudCenter = new Point(400, 400);
+            var layout = new CircularCloudLayouter(cloudCenter);
+            var rectangleList = new List<Rectangle>();
+            rectangleList.Add(layout.PutNextRectangle(new Size(500, 90)));
             for (var i = 0; i < 60; i++)
             {
-                layout.PutNextRectangle(new Size(random.Next(40,160), random.Next(20,60)));
+                rectangleList.Add(layout.PutNextRectangle(new Size(random.Next(40,160), random.Next(20,60))));
             }
-            layout.DrawCloudTag();
-            
+            CloudTagDrawer.DrawToFile(cloudCenter, rectangleList, "1.bmp");
+
         }
     }
 }
