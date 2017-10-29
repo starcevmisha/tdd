@@ -9,16 +9,15 @@ namespace TagsCloudVisualization
         static void Main(string[] args)
         {
             var random = new Random();
-            var cloudCenter = new Point(400, 400);
+            var cloudCenter = new Point(70, 70);
             var layout = new CircularCloudLayouter(cloudCenter);
             var rectangleList = new List<Rectangle>();
-            rectangleList.Add(layout.PutNextRectangle(new Size(500, 90)));
-            for (var i = 0; i < 400; i++)
+            for (var i = 0; i < 100; i++)
             {
                 rectangleList.Add(layout.PutNextRectangle(new Size(10,10)));
             }
-            CloudTagDrawer.DrawToFile(cloudCenter, rectangleList, "1.bmp");
-            CloudTagDrawer.DrawToForm(cloudCenter,rectangleList);
+            CloudTagDrawer.DrawToFile(cloudCenter, rectangleList, "1.bmp", 800, 800);
+            CloudTagDrawer.DrawToForm(cloudCenter,rectangleList, 800, 800);
 
         }
     }

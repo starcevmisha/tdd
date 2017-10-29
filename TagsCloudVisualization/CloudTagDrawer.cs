@@ -7,22 +7,26 @@ namespace TagsCloudVisualization
 {
     public static class CloudTagDrawer
     {
-        public static void DrawToFile(Point cloudCenter, List<Rectangle> rectangleList, string name)
+        public static void DrawToFile(Point cloudCenter, List<Rectangle> rectangleList, string name, int width, int height)
         {
-            var bitmap = new Bitmap(800, 800);
-            DrawRectangleOnBitmap(cloudCenter, rectangleList, bitmap);
-            bitmap.Save(name);
+            using (var bitmap = new Bitmap(width, height))
+            {
+                DrawRectangleOnBitmap(cloudCenter, rectangleList, bitmap);
+                bitmap.Save(name);
+            }
         }
 
-        public static void DrawToForm(Point cloudCenter, List<Rectangle> rectangleList)
+        public static void DrawToForm(Point cloudCenter, List<Rectangle> rectangleList, int width, int height)
         {
-            var bitmap = new Bitmap(800, 800);
-            DrawRectangleOnBitmap(cloudCenter, rectangleList, bitmap);
-            Form aForm = new Form();
-            aForm.Width = 800;
-            aForm.Height = 800;
-            aForm.BackgroundImage = bitmap;
-            aForm.ShowDialog();
+            using (var bitmap = new Bitmap(width, height))
+            {
+                DrawRectangleOnBitmap(cloudCenter, rectangleList, bitmap);
+                Form aForm = new Form();
+                aForm.Width = 800;
+                aForm.Height = 800;
+                aForm.BackgroundImage = bitmap;
+                aForm.ShowDialog();
+            }
         }
 
         private static void DrawRectangleOnBitmap(Point cloudCenter, List<Rectangle> rectangleList, Bitmap bitmap)
