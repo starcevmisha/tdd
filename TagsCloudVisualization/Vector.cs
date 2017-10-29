@@ -3,8 +3,11 @@ using System.Drawing;
 
 namespace TagsCloudVisualization
 {
+    //CR(epeshk): internal
+    //CR(epeshk): добавить тесты на операции
     public class Vector
     {
+        //CR(epeshk): readonly
         public double X;
         public double Y;
 
@@ -32,6 +35,7 @@ namespace TagsCloudVisualization
         {
             return new Vector(a.X - b.X, a.Y - b.Y);
         }
+        //CR(epeshk): double c?
         public static Vector operator /(Vector a, int c)
         {
             return new Vector(a.X / c, a.Y / c);
@@ -50,6 +54,10 @@ namespace TagsCloudVisualization
         {
             return new Size((int)vector.X, (int)vector.Y);
         }
+
+//CR(epeshk): возможно, понадобятся ещё эти операторы
+//        public static implicit operator Vector(Size size);
+//        public static implicit operator Vector(Point size);
 
         public static Vector Angle(double rad)
         {

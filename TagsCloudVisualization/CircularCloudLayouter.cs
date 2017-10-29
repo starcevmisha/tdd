@@ -13,12 +13,14 @@ namespace TagsCloudVisualization
         private List<Rectangle> RectangleList;
         private readonly Random random = new Random();
         private double radius = 10;
+        //CR(epeshk): возможность задать эти параметры?
         private int dDeg = 10;
         private int dRadius = 10;
 
         public CircularCloudLayouter(Point center)
         {
             if (center.X < 0 || center.Y < 0)
+                //CR(epeshk): в сообщении исключения лучше указывать входные данные, которые привели к выбросу исключения. (если их можно записывать в открытом виде в логи)
                 throw new ArgumentException("Coordinates must be non-negative.");
 
             CloudCenter = new Vector(center);
@@ -44,6 +46,20 @@ namespace TagsCloudVisualization
             return newRectagle;
         }
 
+//CR(epeshk): эта и анлогичные реализации не должны проходить тесты
+//        private Rectangle FindPositionOfNewRectangle(Vector sizeVector)
+//        {
+//            var vec = new Vector(1, 0);
+//            while (true)
+//            {
+//                var point = CloudCenter + vec;
+//                var candidate = new Rectangle(point, new Vector(1, 1));
+//                if (!ColisionWithOtherRectangles(candidate))
+//                    return candidate;
+//                vec += new Vector(1, 0);
+//            }
+//        }
+        
         private Rectangle FindPositionOfNewRectangle(Vector sizeVector)
         {
             var curentRadius = radius;
@@ -52,9 +68,11 @@ namespace TagsCloudVisualization
                 var startDeg = random.Next(360);
                 for (var deg = startDeg; deg < startDeg + 360; deg += dDeg)
                 {
+                    //CR(epeshk): можно сразу использовать радианы в for
                     var rad = deg / Math.PI * 180.0;
                     var newRectangleCenter = CloudCenter + curentRadius * Vector.Angle(rad);
                     var leftTop = newRectangleCenter - sizeVector / 2;
+                    //CR(epeshk): для чего координаты должны быть неотрицательными? если центр находится близко к границе, прямоугольники не будут размещены вокруг него
                     if (leftTop.X < 0 || leftTop.Y / 2 < 0)
                         continue;
                     var candidate = new Rectangle(leftTop, sizeVector);
@@ -72,6 +90,7 @@ namespace TagsCloudVisualization
     }
 
 
+    //CR(epeshk): вынести тесты в отдельный файл или проект
     [TestFixture]
     public class CircularCloudLayouter_Tests
     {
@@ -105,6 +124,8 @@ namespace TagsCloudVisualization
         [TestCase(1,2, 3,4, ExpectedResult = 2)]
         [TestCase(1,2, 3,4, 4,2, ExpectedResult = 3)]
         [TestCase(1,2, 3,4, 4,2, 5,7, 10,15, 1,2, ExpectedResult = 6)]
+        //CR(epeshk): Nxt -> Next
+        //CR(epeshk): здесь можно использовать TestCaseSource
         public int PutNxtRectangle_AddManyRectangles(params int[] sizePairArray)
         {
             var layout = new CircularCloudLayouter(new Point(10, 10));
@@ -116,6 +137,7 @@ namespace TagsCloudVisualization
         }
 
         [Test]
+        //CR(epeshk): Reactangle -> Rectangle
         public void PutNextReactangle_FirstRectangle_ShouldBeOnCloudCenter()
         {
             var cloudCenter = new Point(100, 100);
@@ -154,6 +176,7 @@ namespace TagsCloudVisualization
         }
 
         [Test]
+        //CR(epeshk): а 2 - это уже куча? а 10 - это куча?
         public void PutNextRectangle_PairwiseIntersectionShouldBeFalse_OnBigNumberOfRectangles()
         {
             var layout = new CircularCloudLayouter(new Point(10, 10));

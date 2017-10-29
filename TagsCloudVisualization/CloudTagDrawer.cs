@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,7 +8,8 @@ namespace TagsCloudVisualization
     {
         public static void DrawToFile(Point cloudCenter, List<Rectangle> rectangleList, string name)
         {
-            var bitmap = new Bitmap(800, 800);
+            //CR(epeshk): не должно быть хардкода параметров, нужно сделать возможность задать размер без изменения кода CloudTagDrawer'a
+            var bitmap = new Bitmap(800, 800); //CR(epeshk): Bitmap - IDisposable
             DrawRectangleOnBitmap(cloudCenter, rectangleList, bitmap);
             bitmap.Save(name);
         }
@@ -32,7 +32,7 @@ namespace TagsCloudVisualization
             g.DrawRectangle(new Pen(Color.Red), (int) cloudCenter.X, (int) cloudCenter.Y, 1, 1);
             foreach (var rectangle in rectangleList)
                 g.DrawRectangle(selPen, rectangle);
-            g.Dispose();
+            g.Dispose(); //CR(epeshk): using
         }
     }
 }
