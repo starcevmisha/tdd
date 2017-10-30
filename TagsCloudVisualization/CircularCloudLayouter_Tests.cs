@@ -77,6 +77,17 @@ namespace TagsCloudVisualization
             firstRectangle.IntersectsWith(secondRectangle).Should().BeFalse();
         }
 
+        [Test]
+        public void PutNextRectangle_ShouldReturnRectangleWithCorrectSize()
+        {
+            var layout = new CircularCloudLayouter(new Point(10, 10));
+            var size = new Size(20, 25);
+            var firstRectangle = layout.PutNextRectangle(new Size(20, 25));
+            var secondRectangle = layout.PutNextRectangle(new Size(20, 25));
+            secondRectangle.Size.Should().Be(size);
+
+        }
+
 
         [Test]
         public void PutNextRectangle_PairwiseIntersectionShouldBeFalse_OnBigNumberOfRectangles()

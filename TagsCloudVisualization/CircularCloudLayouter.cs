@@ -63,6 +63,20 @@ namespace TagsCloudVisualization
             }
         }
 
+        ////CR(epeshk): эта и анлогичные реализации не должны проходить тесты
+        //private Rectangle FindPositionOfNewRectangle(Vector sizeVector)
+        //{
+        //    var vec = new Vector(1, 0);
+        //    while (true)
+        //    {
+        //        var point = CloudCenter + vec;
+        //        var candidate = new Rectangle(point, new Vector(1, 1));
+        //        if (!ColisionWithOtherRectangles(candidate))
+        //            return candidate;
+        //        vec += new Vector(1, 0);
+        //    }
+        //}
+
         private bool ColisionWithOtherRectangles(Rectangle candidate)
         {
             return RectangleList.Any(rectangle => rectangle.IntersectsWith(candidate));
