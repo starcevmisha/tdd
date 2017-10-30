@@ -36,7 +36,7 @@ namespace TagsCloudVisualization
             g.DrawRectangle(new Pen(Color.Red), (int) cloudCenter.X, (int) cloudCenter.Y, 1, 1);
             foreach (var rectangle in rectangleList)
                 g.DrawRectangle(selPen, rectangle);
-            g.Dispose();
+            g.Dispose(); //CR(epeshk): using
         }
     }
 }

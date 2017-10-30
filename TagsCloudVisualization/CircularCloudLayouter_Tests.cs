@@ -52,6 +52,7 @@ namespace TagsCloudVisualization
             var layout = new CircularCloudLayouter(new Point(10, 10));
             var rectangleList = new List<Rectangle>();
             for (int i = 0; i < sizePairArray.Length; i += 2)
+                //CR(epeshk): объекты Size можно создавать в тесткейсах. Если запись с Size выглядит громоздкой - используй tuple из C# 7
                 rectangleList.Add(layout.PutNextRectangle(new Size(sizePairArray[i], sizePairArray[i + 1])));
             rectangleList.Count.Should().Be(expectedResult);
         }
@@ -111,6 +112,7 @@ namespace TagsCloudVisualization
         [Test]
         public void PutNextRectangle_AllRectanglesShouldBeInTheFormOfNotBigCircle()
         {
+            //CR(epeshk): использовать константы. const int rectanglesCount = 100, ...
             // Общая площадь всех прямоугольников = 100*10*10 
             // Радиус круга с такой площадью есть sqrt(100*10*10/pi)
             // Так как Облако не плотное возьмем 2 таких радиуса
@@ -124,12 +126,14 @@ namespace TagsCloudVisualization
                 if (distance > maxDistance)
                     maxDistance = distance;
             }
+            //CR(epeshk): уменьшить константу, т.к по условию "Облако должно быть плотным, чем плотнее, тем лучше."
             var expectedRadius = 2*Math.Sqrt(100 * 10 * 10 / Math.PI);
             maxDistance.Should().BeLessThan(expectedRadius);
         }
 
         public double DistanceToCenter(Rectangle rectangle, Point cloudCenter)
         {
+            //CR(epeshk): сделать вычисления через класс Vector и extension методы к Rectangle
             return Math.Sqrt((rectangle.X + rectangle.Width / 2 - cloudCenter.X) *
                              (rectangle.X + rectangle.Width / 2 - cloudCenter.X) +
                              (rectangle.Y + rectangle.Height / 2 - cloudCenter.Y) *

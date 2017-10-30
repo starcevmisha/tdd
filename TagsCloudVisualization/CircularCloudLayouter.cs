@@ -7,12 +7,14 @@ using NUnit.Framework;
 
 namespace TagsCloudVisualization
 {
+    //CR(epeshk): отрефакторить класс, оставив в нём только одну ответственность
     public class CircularCloudLayouter
     {
         private Vector CloudCenter;
         private List<Rectangle> RectangleList;
         private readonly Random random = new Random();
         private double radius = 10;
+        //CR(epeshk): назвать константы более читаемо
         private const int DDeg = 10;
         private const int DRadius = 10;
 
@@ -52,6 +54,7 @@ namespace TagsCloudVisualization
                 var startDeg = random.Next(360);
                 for (var deg = startDeg; deg < startDeg + 360; deg += DDeg)
                 {
+                    //CR(epeshk): можно сразу использовать радианы в for
                     var rad = deg / Math.PI * 180.0;
                     var newRectangleCenter = CloudCenter + curentRadius * Vector.Angle(rad);
                     var leftTop = newRectangleCenter - sizeVector / 2;

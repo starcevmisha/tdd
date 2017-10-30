@@ -88,6 +88,7 @@ namespace TagsCloudVisualization
             return (X == v.X) && (Y == v.Y);
         }
 
+        //CR(epeshk): больше тестов на Vector!
         protected bool Equals(Vector other)
         {
             return X.Equals(other.X) && Y.Equals(other.Y);
@@ -112,6 +113,7 @@ namespace TagsCloudVisualization
             var b = new Vector(1, 7);
             var sum = a + b;
             var expectedSum = new Vector(3, 10);
+            //CR(epeshk): Should().Be(expectedSum)
             sum.Should().Equals(expectedSum);
         }
 
@@ -129,6 +131,7 @@ namespace TagsCloudVisualization
         public void Vector_MultiplicationByAConstantTest()
         {
             var a = new Vector(2, 3);
+            //CR(epeshk): multiplication -> multiplicationResult || product
             var multiplication = 2 * a;
             var expected = new Vector(4, 6);
             multiplication.Should().Equals(expected);
@@ -138,6 +141,7 @@ namespace TagsCloudVisualization
         public void Vector_DivideByAConstantTest()
         {
             var a = new Vector(2, 4);
+            //CR(epeshk): multiplication ?
             var multiplication = a / 2;
             var expected = new Vector(1, 2);
             multiplication.Should().Equals(expected);
