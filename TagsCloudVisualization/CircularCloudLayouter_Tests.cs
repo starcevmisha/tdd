@@ -100,8 +100,9 @@ namespace TagsCloudVisualization
         [Test]
         public void PutNextRectangle_AllRectanglesShouldBeInTheFormOfNotBigCircle()
         {
-            //Максимальна дистанция должна быть меньше, 
-            //чем в случае когда все прямоугольнкики выставили в одну линию
+            // Общая площадь всех прямоугольников = 100*10*10 
+            // Радиус круга с такой площадью есть sqrt(100*10*10/pi)
+            // Так как Облако не плотное возьмем 2 таких радиуса
             var cloudCenter = new Point(50, 50);
             var layout = new CircularCloudLayouter(cloudCenter);
             var maxDistance = 0.0;
@@ -112,7 +113,8 @@ namespace TagsCloudVisualization
                 if (distance > maxDistance)
                     maxDistance = distance;
             }
-            maxDistance.Should().BeLessThan(0.5 * 100 * 10);//Количество*Размер и пополам
+            var expectedRadius = 2*Math.Sqrt(100 * 10 * 10 / Math.PI);
+            maxDistance.Should().BeLessThan(expectedRadius);
         }
 
         public double DistanceToCenter(Rectangle rectangle, Point cloudCenter)
