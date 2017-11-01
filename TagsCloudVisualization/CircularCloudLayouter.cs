@@ -13,8 +13,8 @@ namespace TagsCloudVisualization
         private List<Rectangle> RectangleList;
         private readonly Random random = new Random();
         private double radius = 10;
-        private const int DDeg = 10;
-        private const int DRadius = 10;
+        private const double AngleShift = Math.PI/18;
+        private const int RadiusShift = 10;
 
         public CircularCloudLayouter(Point center)
         {
@@ -49,33 +49,32 @@ namespace TagsCloudVisualization
             var curentRadius = radius;
             while (true)
             {
-                var startDeg = random.Next(360);
-                for (var deg = startDeg; deg < startDeg + 360; deg += DDeg)
+                var startAngle = random.NextDouble() * 2 * Math.PI;
+                for (var angle = startAngle; angle < startAngle + 2*Math.PI; angle += AngleShift)
                 {
-                    var rad = deg / Math.PI * 180.0;
-                    var newRectangleCenter = CloudCenter + curentRadius * Vector.Angle(rad);
+                    var newRectangleCenter = CloudCenter + curentRadius * Vector.Angle(angle);
                     var leftTop = newRectangleCenter - sizeVector / 2;
                     var candidate = new Rectangle(leftTop, sizeVector);
                     if (!ColisionWithOtherRectangles(candidate))
                         return candidate;
                 }
-                curentRadius += DRadius;
+                curentRadius += RadiusShift;
             }
         }
 
-        ////CR(epeshk): эта и анлогичные реализации не должны проходить тесты
-        //private Rectangle FindPositionOfNewRectangle(Vector sizeVector)
-        //{
-        //    var vec = new Vector(1, 0);
-        //    while (true)
-        //    {
-        //        var point = CloudCenter + vec;
-        //        var candidate = new Rectangle(point, new Vector(1, 1));
-        //        if (!ColisionWithOtherRectangles(candidate))
-        //            return candidate;
-        //        vec += new Vector(1, 0);
-        //    }
-        //}
+//        ////CR(epeshk): эта и анлогичные реализации не должны проходить тесты
+//        private Rectangle FindPositionOfNewRectangle(Vector sizeVector)
+//        {
+//            var vec = new Vector(1, 0);
+//            while (true)
+//            {
+//                var point = CloudCenter + vec;
+//                var candidate = new Rectangle(point, new Vector(1, 1));
+//                if (!ColisionWithOtherRectangles(candidate))
+//                    return candidate;
+//                vec += new Vector(1, 0);
+//            }
+//        }
 
         private bool ColisionWithOtherRectangles(Rectangle candidate)
         {

@@ -41,18 +41,18 @@ namespace TagsCloudVisualization
 
         private static readonly object[] RectanglesCases =
         {
-            new object[] { new int[]{1, 2, 3, 4}, 2},
-            new object[] { new int[]{ 1, 2, 3, 4, 4, 2 }, 3},
-            new object[] { new int[]{ 1, 2, 3, 4, 4, 2, 5, 7, 10, 15, 1, 2 }, 6},
+            new object[] { new []{(1,2), (3,4)}, 2},
+            new object[] { new []{ (1, 2), (3, 4), (4, 2) }, 3},
+            new object[] { new []{ (1, 2), (3, 4), (4, 2), (5, 7), (10, 15), (1, 2) }, 6},
         };
 
         [Test, TestCaseSource("RectanglesCases")]
-        public void PutNextRectangle_AddManyRectangles(int[] sizePairArray, int expectedResult)
+        public void PutNextRectangle_AddManyRectangles((int, int)[] sizePairArray, int expectedResult)
         {
             var layout = new CircularCloudLayouter(new Point(10, 10));
             var rectangleList = new List<Rectangle>();
-            for (int i = 0; i < sizePairArray.Length; i += 2)
-                rectangleList.Add(layout.PutNextRectangle(new Size(sizePairArray[i], sizePairArray[i + 1])));
+            for (int i = 0; i < sizePairArray.Length; i += 1)
+                rectangleList.Add(layout.PutNextRectangle(new Size(sizePairArray[i].Item1, sizePairArray[i].Item2)));
             rectangleList.Count.Should().Be(expectedResult);
         }
 
@@ -78,14 +78,23 @@ namespace TagsCloudVisualization
         }
 
         [Test]
-        public void PutNextRectangle_ShouldReturnRectangleWithCorrectSize()
+        public void PutNextRectangle_ShouldReturnRectanglesWithCorrectSize()
         {
-            var layout = new CircularCloudLayouter(new Point(10, 10));
             var size = new Size(20, 25);
-            var firstRectangle = layout.PutNextRectangle(new Size(20, 25));
-            var secondRectangle = layout.PutNextRectangle(new Size(20, 25));
-            secondRectangle.Size.Should().Be(size);
-
+            var layout = new CircularCloudLayouter(new Point(10, 10));
+            var rectangleList = new List<Rectangle>();
+            for (var i = 0; i < 100; i++)
+                rectangleList.Add(layout.PutNextRectangle(size));
+            var isCorrectSize = true;
+            foreach (var rectangle in rectangleList)
+            {
+                if (!Equals(rectangle.Size, size))
+                {
+                    isCorrectSize = false;
+                    break;
+                }
+            }
+            isCorrectSize.Should().BeTrue();
         }
 
 
@@ -101,30 +110,32 @@ namespace TagsCloudVisualization
         }
 
         [Test, Timeout(1000)]
-        public void AddALotOfRectangles()
+        public void Timeout_AddALotOfRectangles()
         {
             var layout = new CircularCloudLayouter(new Point(10, 10));
-            for (var i = 1; i < 500; i++)
+            for (var i = 1; i < 400; i++)
                 layout.PutNextRectangle(new Size(10, 10));
         }
 
         [Test]
         public void PutNextRectangle_AllRectanglesShouldBeInTheFormOfNotBigCircle()
         {
+            const int rectangleCount = 100;
+            const int rectangleSize = 10;
             // Общая площадь всех прямоугольников = 100*10*10 
             // Радиус круга с такой площадью есть sqrt(100*10*10/pi)
             // Так как Облако не плотное возьмем 2 таких радиуса
             var cloudCenter = new Point(50, 50);
             var layout = new CircularCloudLayouter(cloudCenter);
             var maxDistance = 0.0;
-            for (var i = 0; i < 100; i++)
+            for (var i = 0; i < rectangleCount; i++)
             {
-                var rectangle = layout.PutNextRectangle(new Size(10, 10));
+                var rectangle = layout.PutNextRectangle(new Size(rectangleSize, rectangleSize));
                 var distance = DistanceToCenter(rectangle, cloudCenter);
                 if (distance > maxDistance)
                     maxDistance = distance;
             }
-            var expectedRadius = 2*Math.Sqrt(100 * 10 * 10 / Math.PI);
+            var expectedRadius = 1.5*Math.Sqrt(rectangleCount *rectangleSize * rectangleSize / Math.PI);
             maxDistance.Should().BeLessThan(expectedRadius);
         }
 

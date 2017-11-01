@@ -85,13 +85,10 @@ namespace TagsCloudVisualization
             {
                 return false;
             }
-            return (X == v.X) && (Y == v.Y);
+            return (Math.Abs(X - v.X) < 1E-14) && (Math.Abs(Y - v.Y) < 1E-14);
         }
 
-        protected bool Equals(Vector other)
-        {
-            return X.Equals(other.X) && Y.Equals(other.Y);
-        }
+
 
         public override int GetHashCode()
         {
@@ -112,7 +109,7 @@ namespace TagsCloudVisualization
             var b = new Vector(1, 7);
             var sum = a + b;
             var expectedSum = new Vector(3, 10);
-            sum.Should().Equals(expectedSum);
+            sum.Should().Be(expectedSum);
         }
 
         [Test]
@@ -120,27 +117,60 @@ namespace TagsCloudVisualization
         {
             var a = new Vector(2, 3);
             var b = new Vector(1, 7);
-            var sum = a - b;
-            var expectedSum = new Vector(1, -4);
-            sum.Should().Equals(expectedSum);
+            var diff = a - b;
+            var expectedDiff = new Vector(1, -4);
+            diff.Should().Be(expectedDiff);
+        }
+
+        [Test]
+        public void Vector_ShouldThrowArgumentException_WhenDividedByZero()
+        {
+            var a = new Vector(2, 3);
+            Vector b = a/0;
         }
 
         [Test]
         public void Vector_MultiplicationByAConstantTest()
         {
             var a = new Vector(2, 3);
-            var multiplication = 2 * a;
+            var product = 2 * a;
             var expected = new Vector(4, 6);
-            multiplication.Should().Equals(expected);
+            product.Should().Be(expected);
         }
 
         [Test]
         public void Vector_DivideByAConstantTest()
         {
             var a = new Vector(2, 4);
-            var multiplication = a / 2;
+            var division = a / 2;
             var expected = new Vector(1, 2);
-            multiplication.Should().Equals(expected);
+            division.Should().Be(expected);
+        }
+
+        [Test]
+        public void Vector_ReturnCorrectAngle()
+        {
+            var angle = Vector.Angle(Math.PI);
+            var expectedAngle = new Vector(-1,0);
+            angle.Should().Be(expectedAngle);
+        }
+
+        [Test]
+        public void Vector_CastToPointTest()
+        {
+            var point = new Point(1,2);
+            var vector = new Vector(1,2);
+            var pointVector = (Point)(vector);
+            pointVector.Should().Be(point);
+        }
+
+        [Test]
+        public void Vector_CastToSizeTest()
+        {
+            var size = new Size(1, 2);
+            var vector = new Vector(1, 2);
+            var pointVector = (Size)(vector);
+            pointVector.Should().Be(size);
         }
     }
 }
