@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Dynamic;
 using System.Linq;
 
 namespace TagsCloudVisualization
 {
     public class CircularCloudLayouter
     {
+        //CR(epeshk): readonly
         private Vector CloudCenter;
-        private List<Rectangle> RectangleList;
+        private List<Rectangle> RectangleList; //CR(epeshk): RectangleList -> Rectangles
         private readonly Random random = new Random();
         private double radius = 10;
         private const double AngleShift = Math.PI / 18;

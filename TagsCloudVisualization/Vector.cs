@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Windows.Forms;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -7,6 +8,7 @@ namespace TagsCloudVisualization
 {
     public class Vector
     {
+        //CR(epeshk): readonly
         public double X;
         public double Y;
 
@@ -68,6 +70,7 @@ namespace TagsCloudVisualization
             return new Vector(point);
         }
 
+        //CR(epeshk): плохо понятен смысл преобразования прямоугольника в вектор. Надо вынести в extension, из названия которого будет понятно, что это такое - координаты центра, угла или размер.
         public static implicit operator Vector(Rectangle rectangle)
         {
             return new Vector(rectangle.X, rectangle.Y);
@@ -92,6 +95,7 @@ namespace TagsCloudVisualization
             {
                 return false;
             }
+            //CR(epeshk): вынести сравнение с заданной точностью из класса Vector
             return (Math.Abs(X - v.X) < 1E-14) && (Math.Abs(Y - v.Y) < 1E-14);
         }
 
@@ -106,6 +110,7 @@ namespace TagsCloudVisualization
         }
     }
 
+    //CR(epeshk): вынести тесты в отдельный файл
     [TestFixture]
     public class Vector_Should
     {

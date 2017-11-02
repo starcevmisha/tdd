@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace TagsCloudVisualization
 {
@@ -51,7 +52,7 @@ namespace TagsCloudVisualization
         {
             var layout = new CircularCloudLayouter(new Point(10, 10));
             var rectangleList = new List<Rectangle>();
-            for (int i = 0; i < sizePairArray.Length; i += 1)
+            for (int i = 0; i < sizePairArray.Length; i += 1) //CR(epeshk): foreach?
                 rectangleList.Add(layout.PutNextRectangle(new Size(sizePairArray[i].Item1, sizePairArray[i].Item2)));
             rectangleList.Count.Should().Be(expectedResult);
         }
@@ -62,6 +63,7 @@ namespace TagsCloudVisualization
             var cloudCenter = new Point(100, 100);
             var layout = new CircularCloudLayouter(cloudCenter);
             var firstRectangle = layout.PutNextRectangle(new Size(10, 10));
+            //CR(epeshk): вынести вычисление координат центра в extension
             var centerOfRectangle = new Point(firstRectangle.X + firstRectangle.Width / 2,
                 firstRectangle.Y + firstRectangle.Height / 2);
 
@@ -69,6 +71,7 @@ namespace TagsCloudVisualization
         }
 
         [Test]
+        //CR(epeshk): исправить опечатки
         public void PutNextReactangle_TwoAddedRectangles_ShouldNotIntersect()
         {
             var layout = new CircularCloudLayouter(new Point(10, 10));
@@ -85,7 +88,7 @@ namespace TagsCloudVisualization
             var rectangleList = new List<Rectangle>();
             for (var i = 0; i < 100; i++)
                 rectangleList.Add(layout.PutNextRectangle(size));
-            var isCorrectSize = true;
+            var isCorrectSize = true; //CR(epeshk): использовать Linq
             foreach (var rectangle in rectangleList)
             {
                 if (!Equals(rectangle.Size, size))
