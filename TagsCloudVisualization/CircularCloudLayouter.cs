@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace TagsCloudVisualization
 {
@@ -13,7 +11,7 @@ namespace TagsCloudVisualization
         private List<Rectangle> RectangleList;
         private readonly Random random = new Random();
         private double radius = 10;
-        private const double AngleShift = Math.PI/18;
+        private const double AngleShift = Math.PI / 18;
         private const int RadiusShift = 10;
 
         public CircularCloudLayouter(Point center)
@@ -28,7 +26,8 @@ namespace TagsCloudVisualization
         public Rectangle PutNextRectangle(Size rectangleSize)
         {
             if (rectangleSize.Height <= 0 || rectangleSize.Width <= 0)
-                throw new ArgumentException($"Size should be Positive, but was ({rectangleSize.Height}, {rectangleSize.Width})");
+                throw new ArgumentException(
+                    $"Size should be Positive, but was ({rectangleSize.Height}, {rectangleSize.Width})");
 
             var sizeVector = new Vector(rectangleSize);
             Rectangle newRectagle;
@@ -50,38 +49,18 @@ namespace TagsCloudVisualization
             while (true)
             {
                 var startAngle = random.NextDouble() * 2 * Math.PI;
-                for (var angle = startAngle; angle < startAngle + 2*Math.PI; angle += AngleShift)
+                for (var angle = startAngle; angle < startAngle + 2 * Math.PI; angle += AngleShift)
                 {
                     var newRectangleCenter = CloudCenter + curentRadius * Vector.Angle(angle);
                     var leftTop = newRectangleCenter - sizeVector / 2;
                     var candidate = new Rectangle(leftTop, sizeVector);
-                    if (!ColisionWithOtherRectangles(candidate))
+                    if (!candidate.IntersectWithOtherRectangles(RectangleList))
                         return candidate;
                 }
                 curentRadius += RadiusShift;
             }
         }
-
-//        ////CR(epeshk): эта и анлогичные реализации не должны проходить тесты
-//        private Rectangle FindPositionOfNewRectangle(Vector sizeVector)
-//        {
-//            var vec = new Vector(1, 0);
-//            while (true)
-//            {
-//                var point = CloudCenter + vec;
-//                var candidate = new Rectangle(point, new Vector(1, 1));
-//                if (!ColisionWithOtherRectangles(candidate))
-//                    return candidate;
-//                vec += new Vector(1, 0);
-//            }
-//        }
-
-        private bool ColisionWithOtherRectangles(Rectangle candidate)
-        {
-            return RectangleList.Any(rectangle => rectangle.IntersectsWith(candidate));
-        }
     }
 
 
-   
 }

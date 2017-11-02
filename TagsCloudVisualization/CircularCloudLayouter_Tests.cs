@@ -124,14 +124,14 @@ namespace TagsCloudVisualization
             const int rectangleSize = 10;
             // Общая площадь всех прямоугольников = 100*10*10 
             // Радиус круга с такой площадью есть sqrt(100*10*10/pi)
-            // Так как Облако не плотное возьмем 2 таких радиуса
+            // Так как Облако из прямоугольников, возьмем 1.5 таких радиуса
             var cloudCenter = new Point(50, 50);
             var layout = new CircularCloudLayouter(cloudCenter);
             var maxDistance = 0.0;
             for (var i = 0; i < rectangleCount; i++)
             {
                 var rectangle = layout.PutNextRectangle(new Size(rectangleSize, rectangleSize));
-                var distance = DistanceToCenter(rectangle, cloudCenter);
+                var distance = rectangle.DistanceTo(cloudCenter);
                 if (distance > maxDistance)
                     maxDistance = distance;
             }
@@ -139,13 +139,7 @@ namespace TagsCloudVisualization
             maxDistance.Should().BeLessThan(expectedRadius);
         }
 
-        public double DistanceToCenter(Rectangle rectangle, Point cloudCenter)
-        {
-            return Math.Sqrt((rectangle.X + rectangle.Width / 2 - cloudCenter.X) *
-                             (rectangle.X + rectangle.Width / 2 - cloudCenter.X) +
-                             (rectangle.Y + rectangle.Height / 2 - cloudCenter.Y) *
-                             (rectangle.Y + rectangle.Height / 2 - cloudCenter.Y));
-        }
+
 
         private static bool PairwiseIntersection(List<Rectangle> rectangleList)
         {
@@ -155,5 +149,7 @@ namespace TagsCloudVisualization
                         return true;
             return false;
         }
+        
     }
+    
 }

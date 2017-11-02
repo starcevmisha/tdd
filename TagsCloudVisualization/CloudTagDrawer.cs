@@ -31,12 +31,13 @@ namespace TagsCloudVisualization
 
         private static void DrawRectangleOnBitmap(Point cloudCenter, List<Rectangle> rectangleList, Bitmap bitmap)
         {
-            var g = Graphics.FromImage(bitmap);
-            var selPen = new Pen(Color.Blue);
-            g.DrawRectangle(new Pen(Color.Red), (int) cloudCenter.X, (int) cloudCenter.Y, 1, 1);
-            foreach (var rectangle in rectangleList)
-                g.DrawRectangle(selPen, rectangle);
-            g.Dispose();
+            using (var g = Graphics.FromImage(bitmap))
+            {
+                var selPen = new Pen(Color.Blue);
+                g.DrawRectangle(new Pen(Color.Red), (int) cloudCenter.X, (int) cloudCenter.Y, 1, 1);
+                foreach (var rectangle in rectangleList)
+                    g.DrawRectangle(selPen, rectangle);
+            }
         }
     }
 }

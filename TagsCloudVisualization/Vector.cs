@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace TagsCloudVisualization
 {
-    internal class Vector
+    public class Vector
     {
         public double X;
         public double Y;
@@ -67,6 +67,13 @@ namespace TagsCloudVisualization
         {
             return new Vector(point);
         }
+
+        public static implicit operator Vector(Rectangle rectangle)
+        {
+            return new Vector(rectangle.X, rectangle.Y);
+        }
+
+
 
         public static Vector Angle(double rad)
         {
