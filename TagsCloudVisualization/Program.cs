@@ -7,30 +7,35 @@ namespace TagsCloudVisualization
 {
     class Program
     {
-        private static readonly Dictionary<string, int> tagsDictionary = new Dictionary<string, int>()
+        private static readonly Dictionary<string, int> wordsDictionary = new Dictionary<string, int>()
         {
-            {"Participation", 100},
+            {"Participation", 90},
+            {"Web 2.0", 90 },
+            {"Java", 70 },
             {"Usability", 50},
             {"Design", 40},
             {"Standartization", 30},
-            {"Python", 20}
+            {"Python", 20},
+            {"Null", 20},
+            { "Hello world", 20}
        
         };
         static void Main(string[] args)
         {
             var cloudCenter = new Point(400, 400);
             var layout = new CircularCloudLayouter(cloudCenter);
-            var rectangleList = new List<Rectangle>();
+            var tagsDict = new Dictionary<Rectangle, (string, Font)>();
 
-            foreach (var tag in tagsDictionary)
+            foreach (var word in wordsDictionary)
             {
-                var tagSize = TextRenderer.MeasureText(tag.Key,
-                    new Font(new FontFamily("Arial"), tag.Value, FontStyle.Regular, GraphicsUnit.Pixel));
-                rectangleList.Add(layout.PutNextRectangle(tagSize));
+                var font = new Font(new FontFamily("Tahoma"), word.Value, FontStyle.Regular, GraphicsUnit.Pixel);
+                var tagSize = TextRenderer.MeasureText(word.Key,font);
+                tagsDict.Add(layout.PutNextRectangle(tagSize), (word.Key, font));
+//                rectangleList.Add(layout.PutNextRectangle(tagSize));
             }
 
-            CloudTagDrawer.DrawToFile(cloudCenter, rectangleList, "1.bmp", 800, 800);
-            CloudTagDrawer.DrawToForm(cloudCenter,rectangleList, tagsDictionary,800, 800);
+            CloudTagDrawer.DrawToFile(cloudCenter, tagsDict, "1.bmp", 800, 800);
+            CloudTagDrawer.DrawToForm(cloudCenter, tagsDict ,800, 800);
 
         }
     }

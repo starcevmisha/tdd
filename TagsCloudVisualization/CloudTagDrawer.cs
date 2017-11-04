@@ -7,20 +7,20 @@ namespace TagsCloudVisualization
 {
     public static class CloudTagDrawer
     {
-        public static void DrawToFile(Point cloudCenter, List<Rectangle> rectangleList, string name, int width, int height)
+        public static void DrawToFile(Point cloudCenter, Dictionary<Rectangle, (string, Font)> tagsDict, string name, int width, int height)
         {
             using (var bitmap = new Bitmap(width, height))
             {
-                DrawRectangleOnBitmap(cloudCenter, rectangleList, bitmap);
+                DrawRectangleOnBitmap(cloudCenter, tagsDict, bitmap);
                 bitmap.Save(name);
             }
         }
 
-        public static void DrawToForm(Point cloudCenter, List<Rectangle> rectangleList, Dictionary<string, int> tagsDictionary, int width, int height)
+        public static void DrawToForm(Point cloudCenter, Dictionary<Rectangle, (string, Font)> tagsDict, int width, int height)
         {
             using (var bitmap = new Bitmap(width, height))
             {
-                DrawRectangleOnBitmap(cloudCenter, rectangleList, bitmap);
+                DrawRectangleOnBitmap(cloudCenter, tagsDict, bitmap);
                 Form aForm = new Form();
                 aForm.Width = 800;
                 aForm.Height = 800;
@@ -29,15 +29,18 @@ namespace TagsCloudVisualization
             }
         }
 
-        private static void DrawRectangleOnBitmap(Point cloudCenter, List<Rectangle> rectangleList, Bitmap bitmap)
+        private static void DrawRectangleOnBitmap(Point cloudCenter, Dictionary<Rectangle, (string, Font)> tagsDict, Bitmap bitmap)
         {
             using (var g = Graphics.FromImage(bitmap))
             {
                 var selPen = new Pen(Color.Blue);
-//                g.DrawString("Hello");
+                var selBrush = new SolidBrush(Color.Black);
                 g.DrawRectangle(new Pen(Color.Red), (int) cloudCenter.X, (int) cloudCenter.Y, 1, 1);
-                foreach (var rectangle in rectangleList)
-                    g.DrawRectangle(selPen, rectangle);
+                foreach (var tag in tagsDict)
+                {
+                    g.DrawRectangle(selPen, tag.Key);
+                    g.DrawString(tag.Value.Item1, tag.Value.Item2, selBrush, tag.Key.X, tag.Key.Y);
+                }
             }
         }
     }
