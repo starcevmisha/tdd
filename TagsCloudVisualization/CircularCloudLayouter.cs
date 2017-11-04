@@ -7,8 +7,8 @@ namespace TagsCloudVisualization
 {
     public class CircularCloudLayouter
     {
-        private Vector CloudCenter;
-        private List<Rectangle> RectangleList;
+        private readonly Vector cloudCenter;
+        private readonly List<Rectangle> rectangles;
         private readonly Random random = new Random();
         private double radius = 10;
         private const double AngleShift = Math.PI / 18;
@@ -19,8 +19,8 @@ namespace TagsCloudVisualization
             if (center.X < 0 || center.Y < 0)
                 throw new ArgumentException($"Coordinates must be non-negative, but was ({center.X},{center.Y})");
 
-            CloudCenter = new Vector(center);
-            RectangleList = new List<Rectangle>();
+            cloudCenter = new Vector(center);
+            rectangles = new List<Rectangle>();
         }
 
         public Rectangle PutNextRectangle(Size rectangleSize)
@@ -31,15 +31,15 @@ namespace TagsCloudVisualization
 
             var sizeVector = new Vector(rectangleSize);
             Rectangle newRectagle;
-            if (RectangleList.Count == 0)
+            if (rectangles.Count == 0)
             {
                 radius = Math.Min(rectangleSize.Height, rectangleSize.Width) / 2.0;
-                var leftTop = CloudCenter - sizeVector / 2;
+                var leftTop = cloudCenter - sizeVector / 2;
                 newRectagle = new Rectangle(leftTop, sizeVector);
             }
             else
                 newRectagle = FindPositionOfNewRectangle(sizeVector);
-            RectangleList.Add(newRectagle);
+            rectangles.Add(newRectagle);
             return newRectagle;
         }
 
@@ -51,10 +51,10 @@ namespace TagsCloudVisualization
                 var startAngle = random.NextDouble() * 2 * Math.PI;
                 for (var angle = startAngle; angle < startAngle + 2 * Math.PI; angle += AngleShift)
                 {
-                    var newRectangleCenter = CloudCenter + curentRadius * Vector.Angle(angle);
+                    var newRectangleCenter = cloudCenter + curentRadius * Vector.Angle(angle);
                     var leftTop = newRectangleCenter - sizeVector / 2;
                     var candidate = new Rectangle(leftTop, sizeVector);
-                    if (!candidate.IntersectWithOtherRectangles(RectangleList))
+                    if (!candidate.IntersectWithAny(rectangles))
                         return candidate;
                 }
                 curentRadius += RadiusShift;

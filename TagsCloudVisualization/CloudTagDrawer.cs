@@ -16,7 +16,7 @@ namespace TagsCloudVisualization
             }
         }
 
-        public static void DrawToForm(Point cloudCenter, List<Rectangle> rectangleList, int width, int height)
+        public static void DrawToForm(Point cloudCenter, List<Rectangle> rectangleList, Dictionary<string, int> tagsDictionary, int width, int height)
         {
             using (var bitmap = new Bitmap(width, height))
             {
@@ -34,6 +34,7 @@ namespace TagsCloudVisualization
             using (var g = Graphics.FromImage(bitmap))
             {
                 var selPen = new Pen(Color.Blue);
+//                g.DrawString("Hello");
                 g.DrawRectangle(new Pen(Color.Red), (int) cloudCenter.X, (int) cloudCenter.Y, 1, 1);
                 foreach (var rectangle in rectangleList)
                     g.DrawRectangle(selPen, rectangle);

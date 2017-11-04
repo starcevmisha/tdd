@@ -47,12 +47,13 @@ namespace TagsCloudVisualization
         };
 
         [Test, TestCaseSource("RectanglesCases")]
-        public void PutNextRectangle_AddManyRectangles((int, int)[] sizePairArray, int expectedResult)
+        public void PutNextRectangle_AddManyRectangles((int, int)[] sizePairsArray, int expectedResult)
         {
             var layout = new CircularCloudLayouter(new Point(10, 10));
             var rectangleList = new List<Rectangle>();
-            for (int i = 0; i < sizePairArray.Length; i += 1)
-                rectangleList.Add(layout.PutNextRectangle(new Size(sizePairArray[i].Item1, sizePairArray[i].Item2)));
+            foreach (var sizePair in sizePairsArray){
+                rectangleList.Add(layout.PutNextRectangle(new Size(sizePair.Item1, sizePair.Item2)));
+            }
             rectangleList.Count.Should().Be(expectedResult);
         }
 
@@ -69,7 +70,7 @@ namespace TagsCloudVisualization
         }
 
         [Test]
-        public void PutNextReactangle_TwoAddedRectangles_ShouldNotIntersect()
+        public void PutNextRectangle_TwoAddedRectangles_ShouldNotIntersect()
         {
             var layout = new CircularCloudLayouter(new Point(10, 10));
             var firstRectangle = layout.PutNextRectangle(new Size(20, 25));
@@ -85,15 +86,8 @@ namespace TagsCloudVisualization
             var rectangleList = new List<Rectangle>();
             for (var i = 0; i < 100; i++)
                 rectangleList.Add(layout.PutNextRectangle(size));
-            var isCorrectSize = true;
-            foreach (var rectangle in rectangleList)
-            {
-                if (!Equals(rectangle.Size, size))
-                {
-                    isCorrectSize = false;
-                    break;
-                }
-            }
+
+            var isCorrectSize = rectangleList.All(rectangle => Equals(rectangle.Size, size));
             isCorrectSize.Should().BeTrue();
         }
 
