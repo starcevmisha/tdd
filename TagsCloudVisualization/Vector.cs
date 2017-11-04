@@ -79,7 +79,7 @@ namespace TagsCloudVisualization
             return new Vector(Math.Cos(rad), Math.Sin(rad));
         }
 
-        public override bool Equals(System.Object obj)
+        public override bool Equals(Object obj)
         {
             if (obj == null)
             {
@@ -91,9 +91,8 @@ namespace TagsCloudVisualization
             {
                 return false;
             }
-            return (Math.Abs(X - v.X) < 1E-14) && (Math.Abs(Y - v.Y) < 1E-14);
+            return X== v.X && Y==v.Y;
         }
-
 
 
         public override int GetHashCode()

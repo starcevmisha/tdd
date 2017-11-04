@@ -8,14 +8,20 @@ namespace TagsCloudVisualization
     [TestFixture]
     public class Vector_Tests
     {
+        private const double Precision = 1e14;
         [Test]
         public void Vector_AdditionTest()
         {
             var a = new Vector(2, 3);
             var b = new Vector(1, 7);
             var sum = a + b;
-            var expectedSum = new Vector(3, 10);
-            sum.Should().Be(expectedSum);
+            var expected = new Vector(3, 10);
+            sum.ShouldBeEquivalentTo(expected, options => options
+                .WithStrictOrdering()
+                .Using<double>(ctx => ctx.Subject.Should()
+                    .BeApproximately(ctx.Expectation, Precision))
+                .When(o => o.SelectedMemberPath == "X" ||
+                           o.SelectedMemberPath == "Y"));
         }
 
         [Test]
@@ -24,15 +30,13 @@ namespace TagsCloudVisualization
             var a = new Vector(2, 3);
             var b = new Vector(1, 7);
             var diff = a - b;
-            var expectedDiff = new Vector(1, -4);
-            diff.Should().Be(expectedDiff);
-        }
-
-        [Test]
-        public void Vector_ShouldThrowArgumentException_WhenDividedByZero()
-        {
-            var a = new Vector(2, 3);
-            Vector b = a / 0;
+            var expected = new Vector(1, -4);
+            diff.ShouldBeEquivalentTo(expected, options => options
+                .WithStrictOrdering()
+                .Using<double>(ctx => ctx.Subject.Should()
+                    .BeApproximately(ctx.Expectation, Precision))
+                .When(o => o.SelectedMemberPath == "X" ||
+                           o.SelectedMemberPath == "Y"));
         }
 
         [Test]
@@ -41,7 +45,12 @@ namespace TagsCloudVisualization
             var a = new Vector(2, 3);
             var product = 2 * a;
             var expected = new Vector(4, 6);
-            product.Should().Be(expected);
+            product.ShouldBeEquivalentTo(expected, options => options
+                .WithStrictOrdering()
+                .Using<double>(ctx => ctx.Subject.Should()
+                    .BeApproximately(ctx.Expectation, Precision))
+                .When(o => o.SelectedMemberPath == "X" ||
+                           o.SelectedMemberPath == "Y"));
         }
 
         [Test]
@@ -50,22 +59,37 @@ namespace TagsCloudVisualization
             var a = new Vector(2, 4);
             var division = a / 2;
             var expected = new Vector(1, 2);
-            division.Should().Be(expected);
+            division.ShouldBeEquivalentTo(expected, options => options
+                .WithStrictOrdering()
+                .Using<double>(ctx => ctx.Subject.Should()
+                    .BeApproximately(ctx.Expectation, Precision))
+                .When(o => o.SelectedMemberPath == "X" ||
+                           o.SelectedMemberPath == "Y"));
         }
 
         [Test]
         public void Vector_LengthTest()
         {
             var vector = new Vector(3, 4);
-            var expectedLength = 5;
-            vector.Length().Should().Be(expectedLength);
+            var expected = 5;
+            vector.Length().ShouldBeEquivalentTo(expected, options => options
+                .WithStrictOrdering()
+                .Using<double>(ctx => ctx.Subject.Should()
+                    .BeApproximately(ctx.Expectation, Precision))
+                .When(o => o.SelectedMemberPath == "X" ||
+                           o.SelectedMemberPath == "Y"));
         }
         [Test]
         public void Vector_ReturnCorrectAngle()
         {
             var angle = Vector.Angle(Math.PI);
-            var expectedAngle = new Vector(-1, 0);
-            angle.Should().Be(expectedAngle);
+            var expected = new Vector(-1, 0);
+            angle.ShouldBeEquivalentTo(expected, options => options
+                .WithStrictOrdering()
+                .Using<double>(ctx => ctx.Subject.Should()
+                    .BeApproximately(ctx.Expectation, Precision))
+                .When(o => o.SelectedMemberPath == "X" ||
+                           o.SelectedMemberPath == "Y"));
         }
 
         [Test]

@@ -68,10 +68,14 @@
     <Compile Include="Tests\RectangleExtensions_Tests.cs" />
     <Compile Include="Vector.cs" />
     <Compile Include="Tests\Vector_Tests.cs" />
+    <Compile Include="VectorExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
