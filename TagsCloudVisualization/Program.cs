@@ -34,8 +34,8 @@ namespace TagsCloudVisualization
 //                rectangleList.Add(layout.PutNextRectangle(tagSize));
             }
 
-            CloudTagDrawer.DrawToFile(cloudCenter, tagsDict, "1.bmp", 800, 800);
-            CloudTagDrawer.DrawToForm(cloudCenter, tagsDict ,800, 800);
+            CloudTagDrawer.DrawTagsToFile(cloudCenter, tagsDict, "1.bmp", 800, 800);
+            CloudTagDrawer.DrawTagsToForm(cloudCenter, tagsDict ,800, 800);
 
         }
     }

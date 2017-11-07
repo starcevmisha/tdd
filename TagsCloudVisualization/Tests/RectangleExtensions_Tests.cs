@@ -10,6 +10,8 @@ namespace TagsCloudVisualization
         [TestFixture]
         public class RectangleExteinsions_Should
         {
+
+
             [Test]
             public void IntersectWithAny_ShouldBeTrue_OnIntersectingWithAllRectangles()
             {
