@@ -34,9 +34,7 @@ namespace TagsCloudVisualization
             var actualMaxRadius = 1;
 
             if (layout.Rectangles.Count != 0)
-                actualMaxRadius = (int)layout.Rectangles
-                    .Select(rectangle => rectangle.DistanceTo(cloudCenter))
-                    .Max()+100;
+                actualMaxRadius = (int) layout.Rectangles.Max(rectangle => rectangle.DistanceTo(cloudCenter)) + 100;
 
             CloudTagDrawer.DrawRectanglesToFile(cloudCenter, layout.Rectangles.ToList(), path, 2*actualMaxRadius, 2*actualMaxRadius);
 
@@ -123,7 +121,7 @@ namespace TagsCloudVisualization
             for (var i = 0; i < 100; i++)
                 layout.PutNextRectangle(new Size(10, 10));
 
-            PairwiseIntersection(layout.Rectangles.ToList()).Should().BeFalse();
+            PairwiseIntersection(layout.Rectangles.ToList()).Should().BeTrue();
         }
 
         [Test, Timeout(1000)]
