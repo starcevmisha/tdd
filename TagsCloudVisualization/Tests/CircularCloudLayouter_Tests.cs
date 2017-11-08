@@ -28,7 +28,7 @@ namespace TagsCloudVisualization
         {
             if (TestContext.CurrentContext.Result.FailCount == 0) return;
 
-            var desktopPath = @"C:\tmp";
+            var desktopPath = TestContext.CurrentContext.TestDirectory;
             var path = Path.Combine(desktopPath, currentTestName + ".bmp");
 
             var actualMaxRadius = 1;

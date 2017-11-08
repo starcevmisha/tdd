@@ -10,7 +10,7 @@ namespace TagsCloudVisualization
         private readonly Vector cloudCenter;
         private readonly List<Rectangle> rectangles;
 
-        public IList<Rectangle> Rectangles => rectangles.AsReadOnly();
+        public IReadOnlyList<Rectangle> Rectangles => rectangles.AsReadOnly();
         private readonly Random random = new Random();
         private double radius = 10;
         private const double AngleShift = Math.PI / 18;
