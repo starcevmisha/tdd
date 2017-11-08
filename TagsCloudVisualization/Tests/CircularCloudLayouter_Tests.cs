@@ -14,33 +14,31 @@ namespace TagsCloudVisualization
     public class CircularCloudLayouter_Tests
     {
         private CircularCloudLayouter layout;
-        private List<Rectangle> rectangles;
         private Point cloudCenter;
         private string currentTestName => TestContext.CurrentContext.Test.Name;
         
         [SetUp]
         public void SetUp()
         {
-            cloudCenter = new Point(10, 10);
-            layout = new CircularCloudLayouter(new Point(10, 10));
-            rectangles = new List<Rectangle>();
+            cloudCenter = new Point(100, 100);
+            layout = new CircularCloudLayouter(cloudCenter);
         }
         [TearDown]
         public void TearDown()
         {
             if (TestContext.CurrentContext.Result.FailCount == 0) return;
 
-            var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            var desktopPath = @"C:\tmp";
             var path = Path.Combine(desktopPath, currentTestName + ".bmp");
 
             var actualMaxRadius = 1;
 
-            if (rectangles.Count != 0)
-                actualMaxRadius = (int)rectangles
+            if (layout.Rectangles.Count != 0)
+                actualMaxRadius = (int)layout.Rectangles
                     .Select(rectangle => rectangle.DistanceTo(cloudCenter))
-                    .Max();
+                    .Max()+100;
 
-            CloudTagDrawer.DrawRectanglesToFile(cloudCenter, rectangles,path, 2*actualMaxRadius, 2*actualMaxRadius);
+            CloudTagDrawer.DrawRectanglesToFile(cloudCenter, layout.Rectangles.ToList(), path, 2*actualMaxRadius, 2*actualMaxRadius);
 
             Console.WriteLine($@"Tag cloud visualization saved to file {path}");
         }
@@ -66,8 +64,8 @@ namespace TagsCloudVisualization
         [Test]
         public void PutNextRectangle_ShouldReturnRectangle_WithCorrectSize()
         {
-            rectangles.Add(layout.PutNextRectangle(new Size(20, 25)));
-            rectangles[0].Size.ShouldBeEquivalentTo(new Size(20, 25));
+            layout.PutNextRectangle(new Size(20, 25));
+            layout.Rectangles[0].Size.ShouldBeEquivalentTo(new Size(20, 25));
         }
 
         private static readonly object[] RectanglesCases =
@@ -83,16 +81,16 @@ namespace TagsCloudVisualization
         public void PutNextRectangle_AddManyRectangles((int, int)[] sizePairsArray, int expectedResult)
         {
             foreach (var sizePair in sizePairsArray){
-                rectangles.Add(layout.PutNextRectangle(new Size(sizePair.Item1, sizePair.Item2)));
+                layout.PutNextRectangle(new Size(sizePair.Item1, sizePair.Item2));
             }
-            rectangles.Count.Should().Be(expectedResult);
+            layout.Rectangles.Count.Should().Be(expectedResult);
         }
 
         [Test]
         public void PutNextRectangle_FirstRectangle_ShouldBeOnCloudCenter()
         {
-            rectangles.Add(layout.PutNextRectangle(new Size(10, 10)));
-            var firstRectangle = rectangles[0];
+            layout.PutNextRectangle(new Size(10, 10));
+            var firstRectangle = layout.Rectangles[0];
             var centerOfRectangle = new Point(firstRectangle.X + firstRectangle.Width / 2,
                 firstRectangle.Y + firstRectangle.Height / 2);
             centerOfRectangle.ShouldBeEquivalentTo(cloudCenter);
@@ -101,10 +99,10 @@ namespace TagsCloudVisualization
         [Test]
         public void PutNextRectangle_TwoAddedRectangles_ShouldNotIntersect()
         {
-            rectangles.Add(layout.PutNextRectangle(new Size(20, 25)));
-            rectangles.Add(layout.PutNextRectangle(new Size(20, 25)));
-            var firstRectangle = rectangles[0];
-            var secondRectangle = rectangles[1];
+            layout.PutNextRectangle(new Size(20, 25));
+            layout.PutNextRectangle(new Size(20, 25));
+            var firstRectangle = layout.Rectangles[0];
+            var secondRectangle = layout.Rectangles[1];
             firstRectangle.IntersectsWith(secondRectangle).Should().BeFalse();
         }
 
@@ -113,8 +111,8 @@ namespace TagsCloudVisualization
         {
             var size = new Size(20, 25);
             for (var i = 0; i < 100; i++)
-                rectangles.Add(layout.PutNextRectangle(size));
-            var isCorrectSize = rectangles.All(rectangle => Equals(rectangle.Size, size));
+               layout.PutNextRectangle(size);
+            var isCorrectSize = layout.Rectangles.All(rectangle => Equals(rectangle.Size, size));
             isCorrectSize.Should().BeTrue();
         }
 
@@ -123,16 +121,16 @@ namespace TagsCloudVisualization
         public void PutNextRectangle_PairwiseIntersectionShouldBeFalse_OnBigNumberOfRectangles()
         {
             for (var i = 0; i < 100; i++)
-                rectangles.Add(layout.PutNextRectangle(new Size(10, 10)));
+                layout.PutNextRectangle(new Size(10, 10));
 
-            PairwiseIntersection(rectangles).Should().BeFalse();
+            PairwiseIntersection(layout.Rectangles.ToList()).Should().BeFalse();
         }
 
         [Test, Timeout(1000)]
         public void Timeout_AddALotOfRectangles()
         {
             for (var i = 1; i < 400; i++)
-                rectangles.Add(layout.PutNextRectangle(new Size(10, 10)));
+              layout.PutNextRectangle(new Size(10, 10));
         }
 
         [Test]
@@ -147,8 +145,8 @@ namespace TagsCloudVisualization
             var maxDistance = 0.0;
             for (var i = 0; i < rectangleCount; i++)
             {
-                rectangles.Add(layout.PutNextRectangle(new Size(rectangleSize, rectangleSize)));
-                var rectangle = rectangles[rectangles.Count-1];
+                layout.PutNextRectangle(new Size(rectangleSize, rectangleSize));
+                var rectangle = layout.Rectangles[layout.Rectangles.Count-1];
                 var distance = rectangle.DistanceTo(cloudCenter);
                 if (distance > maxDistance)
                     maxDistance = distance;
